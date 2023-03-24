@@ -354,17 +354,17 @@ public class LegacyMongoDBSourceTest extends LegacyMongoDBTestBase {
     public void testConnectionUri() {
         String hosts = MONGODB_CONTAINER.getHostAndPort();
 
-        ConnectionString case0 = buildConnectionString(null, null, hosts, null);
+        ConnectionString case0 = buildConnectionString("mongodb", null, null, hosts, null);
         assertEquals(String.format("mongodb://%s", hosts), case0.toString());
 
-        ConnectionString case1 = buildConnectionString("", null, hosts, null);
+        ConnectionString case1 = buildConnectionString("mongodb", "", null, hosts, null);
         assertEquals(String.format("mongodb://%s", hosts), case1.toString());
 
-        ConnectionString case2 = buildConnectionString(null, "", hosts, null);
+        ConnectionString case2 = buildConnectionString("mongodb", null, "", hosts, null);
         assertEquals(String.format("mongodb://%s", hosts), case2.toString());
 
         ConnectionString case3 =
-                buildConnectionString(FLINK_USER, FLINK_USER_PASSWORD, hosts, null);
+                buildConnectionString("mongodb", FLINK_USER, FLINK_USER_PASSWORD, hosts, null);
         assertEquals(FLINK_USER, case3.getUsername());
         assertEquals(FLINK_USER_PASSWORD, new String(case3.getPassword()));
     }

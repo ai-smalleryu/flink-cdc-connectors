@@ -39,6 +39,7 @@ public class MongoDBSourceConfigFactory implements Factory<MongoDBSourceConfig> 
 
     private static final long serialVersionUID = 1L;
 
+    private String schema;
     private String hosts;
     private String username;
     private String password;
@@ -53,6 +54,11 @@ public class MongoDBSourceConfigFactory implements Factory<MongoDBSourceConfig> 
     private Integer heartbeatIntervalMillis = HEARTBEAT_INTERVAL_MILLIS.defaultValue();
     private Integer splitMetaGroupSize = CHUNK_META_GROUP_SIZE.defaultValue();
     private Integer splitSizeMB = SCAN_INCREMENTAL_SNAPSHOT_CHUNK_SIZE_MB.defaultValue();
+
+    public MongoDBSourceConfigFactory schema(String schema) {
+        this.schema = schema;
+        return this;
+    }
 
     /** The comma-separated list of hostname and port pairs of mongodb servers. */
     public MongoDBSourceConfigFactory hosts(String hosts) {
@@ -196,6 +202,7 @@ public class MongoDBSourceConfigFactory implements Factory<MongoDBSourceConfig> 
     @Override
     public MongoDBSourceConfig create(int subtaskId) {
         return new MongoDBSourceConfig(
+                schema,
                 hosts,
                 username,
                 password,

@@ -56,7 +56,6 @@ import static com.mongodb.client.model.Sorts.ascending;
 import static com.ververica.cdc.connectors.mongodb.internal.MongoDBEnvelope.DROPPED_FIELD;
 import static com.ververica.cdc.connectors.mongodb.internal.MongoDBEnvelope.ID_FIELD;
 import static com.ververica.cdc.connectors.mongodb.internal.MongoDBEnvelope.KEY_FIELD;
-import static com.ververica.cdc.connectors.mongodb.internal.MongoDBEnvelope.MONGODB_SCHEME;
 import static com.ververica.cdc.connectors.mongodb.internal.MongoDBEnvelope.NAMESPACE_FIELD;
 import static com.ververica.cdc.connectors.mongodb.internal.MongoDBEnvelope.UUID_FIELD;
 import static com.ververica.cdc.connectors.mongodb.internal.MongoDBEnvelope.encodeValue;
@@ -346,11 +345,12 @@ public class MongoUtils {
     }
 
     public static ConnectionString buildConnectionString(
+            String schema,
             @Nullable String username,
             @Nullable String password,
             String hosts,
             @Nullable String connectionOptions) {
-        StringBuilder sb = new StringBuilder(MONGODB_SCHEME).append("://");
+        StringBuilder sb = new StringBuilder(schema).append("://");
 
         if (StringUtils.isNotEmpty(username) && StringUtils.isNotEmpty(password)) {
             sb.append(encodeValue(username)).append(":").append(encodeValue(password)).append("@");

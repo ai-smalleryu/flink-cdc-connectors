@@ -33,6 +33,7 @@ public class MongoDBSourceConfig implements SourceConfig {
 
     private static final long serialVersionUID = 1L;
 
+    private final String schema;
     private final String hosts;
     @Nullable private final String username;
     @Nullable private final String password;
@@ -49,6 +50,7 @@ public class MongoDBSourceConfig implements SourceConfig {
     private final int splitSizeMB;
 
     MongoDBSourceConfig(
+            String schema,
             String hosts,
             @Nullable String username,
             @Nullable String password,
@@ -63,13 +65,14 @@ public class MongoDBSourceConfig implements SourceConfig {
             int heartbeatIntervalMillis,
             int splitMetaGroupSize,
             int splitSizeMB) {
+        this.schema = schema;
         this.hosts = checkNotNull(hosts);
         this.username = username;
         this.password = password;
         this.databaseList = databaseList;
         this.collectionList = collectionList;
         this.connectionString =
-                buildConnectionString(username, password, hosts, connectionOptions)
+                buildConnectionString(schema, username, password, hosts, connectionOptions)
                         .getConnectionString();
         this.batchSize = batchSize;
         this.pollAwaitTimeMillis = pollAwaitTimeMillis;
@@ -79,6 +82,10 @@ public class MongoDBSourceConfig implements SourceConfig {
         this.heartbeatIntervalMillis = heartbeatIntervalMillis;
         this.splitMetaGroupSize = splitMetaGroupSize;
         this.splitSizeMB = splitSizeMB;
+    }
+
+    public String getSchema() {
+        return schema;
     }
 
     public String getHosts() {
@@ -177,6 +184,7 @@ public class MongoDBSourceConfig implements SourceConfig {
     @Override
     public int hashCode() {
         return Objects.hash(
+                schema,
                 hosts,
                 username,
                 password,

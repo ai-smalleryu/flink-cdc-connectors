@@ -52,6 +52,11 @@ public class MongoDBSourceBuilder<T> {
     private final MongoDBSourceConfigFactory configFactory = new MongoDBSourceConfigFactory();
     private DebeziumDeserializationSchema<T> deserializer;
 
+    public MongoDBSourceBuilder<T> schema(String schema) {
+        this.configFactory.schema(schema);
+        return this;
+    }
+
     /** The comma-separated list of hostname and port pairs of mongodb servers. */
     public MongoDBSourceBuilder<T> hosts(String hosts) {
         this.configFactory.hosts(hosts);

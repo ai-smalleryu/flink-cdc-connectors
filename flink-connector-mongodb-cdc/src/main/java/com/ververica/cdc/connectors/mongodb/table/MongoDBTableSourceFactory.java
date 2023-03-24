@@ -33,6 +33,7 @@ import static com.ververica.cdc.connectors.base.options.SourceOptions.CHUNK_META
 import static com.ververica.cdc.connectors.mongodb.source.config.MongoDBSourceOptions.BATCH_SIZE;
 import static com.ververica.cdc.connectors.mongodb.source.config.MongoDBSourceOptions.COLLECTION;
 import static com.ververica.cdc.connectors.mongodb.source.config.MongoDBSourceOptions.CONNECTION_OPTIONS;
+import static com.ververica.cdc.connectors.mongodb.source.config.MongoDBSourceOptions.CONNECTION_SCHEMA;
 import static com.ververica.cdc.connectors.mongodb.source.config.MongoDBSourceOptions.COPY_EXISTING;
 import static com.ververica.cdc.connectors.mongodb.source.config.MongoDBSourceOptions.COPY_EXISTING_QUEUE_SIZE;
 import static com.ververica.cdc.connectors.mongodb.source.config.MongoDBSourceOptions.DATABASE;
@@ -63,6 +64,7 @@ public class MongoDBTableSourceFactory implements DynamicTableSourceFactory {
         final ReadableConfig config = helper.getOptions();
 
         String hosts = config.get(HOSTS);
+        String schema = config.get(CONNECTION_SCHEMA);
         String connectionOptions = config.getOptional(CONNECTION_OPTIONS).orElse(null);
 
         String username = config.getOptional(USERNAME).orElse(null);
@@ -98,6 +100,7 @@ public class MongoDBTableSourceFactory implements DynamicTableSourceFactory {
 
         return new MongoDBTableSource(
                 physicalSchema,
+                schema,
                 hosts,
                 username,
                 password,

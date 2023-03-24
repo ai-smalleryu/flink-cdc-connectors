@@ -85,6 +85,7 @@ public class MongoDBTableFactoryTest {
                     UniqueConstraint.primaryKey("pk", Collections.singletonList("_id")));
 
     private static final String MY_HOSTS = "localhost:27017,localhost:27018";
+    private static final String CONNECTION_SCHEMA = "mongodb";
     private static final String USER = "flinkuser";
     private static final String PASSWORD = "flinkpw";
     private static final String MY_DATABASE = "myDB";
@@ -111,6 +112,7 @@ public class MongoDBTableFactoryTest {
         MongoDBTableSource expectedSource =
                 new MongoDBTableSource(
                         SCHEMA,
+                        CONNECTION_SCHEMA,
                         MY_HOSTS,
                         USER,
                         PASSWORD,
@@ -148,6 +150,7 @@ public class MongoDBTableFactoryTest {
         MongoDBTableSource expectedSource =
                 new MongoDBTableSource(
                         SCHEMA,
+                        CONNECTION_SCHEMA,
                         MY_HOSTS,
                         USER,
                         PASSWORD,
@@ -182,6 +185,7 @@ public class MongoDBTableFactoryTest {
         MongoDBTableSource expectedSource =
                 new MongoDBTableSource(
                         ResolvedSchemaUtils.getPhysicalSchema(SCHEMA_WITH_METADATA),
+                        CONNECTION_SCHEMA,
                         MY_HOSTS,
                         USER,
                         PASSWORD,

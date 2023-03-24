@@ -38,6 +38,7 @@ import static com.ververica.cdc.connectors.mongodb.internal.MongoDBConnectorSour
 import static com.ververica.cdc.connectors.mongodb.internal.MongoDBEnvelope.HEARTBEAT_TOPIC_NAME;
 import static com.ververica.cdc.connectors.mongodb.internal.MongoDBEnvelope.OUTPUT_SCHEMA;
 import static com.ververica.cdc.connectors.mongodb.source.config.MongoDBSourceOptions.BATCH_SIZE;
+import static com.ververica.cdc.connectors.mongodb.source.config.MongoDBSourceOptions.CONNECTION_SCHEMA;
 import static com.ververica.cdc.connectors.mongodb.source.config.MongoDBSourceOptions.COPY_EXISTING;
 import static com.ververica.cdc.connectors.mongodb.source.config.MongoDBSourceOptions.HEARTBEAT_INTERVAL_MILLIS;
 import static com.ververica.cdc.connectors.mongodb.source.config.MongoDBSourceOptions.POLL_AWAIT_TIME_MILLIS;
@@ -63,7 +64,7 @@ public class MongoDBSource {
 
     /** Builder class of {@link MongoDBSource}. */
     public static class Builder<T> {
-
+        private String schema = CONNECTION_SCHEMA.defaultValue();
         private String hosts;
         private String username;
         private String password;
@@ -80,6 +81,11 @@ public class MongoDBSource {
         private String copyExistingPipeline;
         private Integer heartbeatIntervalMillis = HEARTBEAT_INTERVAL_MILLIS.defaultValue();
         private DebeziumDeserializationSchema<T> deserializer;
+
+        public Builder<T> schema(String schema) {
+            this.schema = schema;
+            return this;
+        }
 
         /** The comma-separated list of hostname and port pairs of mongodb servers. */
         public Builder<T> hosts(String hosts) {
@@ -261,7 +267,8 @@ public class MongoDBSource {
             props.setProperty(
                     MongoSourceConfig.CONNECTION_URI_CONFIG,
                     String.valueOf(
-                            buildConnectionString(username, password, hosts, connectionOptions)));
+                            buildConnectionString(
+                                    schema, username, password, hosts, connectionOptions)));
 
             if (databaseList != null) {
                 props.setProperty(DATABASE_INCLUDE_LIST, String.join(",", databaseList));

@@ -62,6 +62,7 @@ public class MongoDBTableSource implements ScanTableSource, SupportsReadingMetad
     private static final Logger LOG = LoggerFactory.getLogger(MongoDBTableSource.class);
 
     private final ResolvedSchema physicalSchema;
+    private final String schema;
     private final String hosts;
     private final String connectionOptions;
     private final String username;
@@ -91,6 +92,7 @@ public class MongoDBTableSource implements ScanTableSource, SupportsReadingMetad
 
     public MongoDBTableSource(
             ResolvedSchema physicalSchema,
+            String schema,
             String hosts,
             @Nullable String username,
             @Nullable String password,
@@ -108,6 +110,7 @@ public class MongoDBTableSource implements ScanTableSource, SupportsReadingMetad
             @Nullable Integer splitMetaGroupSize,
             @Nullable Integer splitSizeMB) {
         this.physicalSchema = physicalSchema;
+        this.schema = schema;
         this.hosts = checkNotNull(hosts);
         this.username = username;
         this.password = password;
@@ -174,6 +177,7 @@ public class MongoDBTableSource implements ScanTableSource, SupportsReadingMetad
             MongoDBSourceBuilder<RowData> builder =
                     MongoDBSource.<RowData>builder().hosts(hosts).deserializer(deserializer);
 
+            Optional.ofNullable(schema).ifPresent(builder::schema);
             Optional.ofNullable(databaseList).ifPresent(builder::databaseList);
             Optional.ofNullable(collectionList).ifPresent(builder::collectionList);
             Optional.ofNullable(username).ifPresent(builder::username);
@@ -195,6 +199,7 @@ public class MongoDBTableSource implements ScanTableSource, SupportsReadingMetad
                             .hosts(hosts)
                             .deserializer(deserializer);
 
+            Optional.ofNullable(schema).ifPresent(builder::schema);
             Optional.ofNullable(databaseList).ifPresent(builder::databaseList);
             Optional.ofNullable(collectionList).ifPresent(builder::collectionList);
             Optional.ofNullable(username).ifPresent(builder::username);
@@ -248,6 +253,7 @@ public class MongoDBTableSource implements ScanTableSource, SupportsReadingMetad
         MongoDBTableSource source =
                 new MongoDBTableSource(
                         physicalSchema,
+                        schema,
                         hosts,
                         username,
                         password,
@@ -279,6 +285,7 @@ public class MongoDBTableSource implements ScanTableSource, SupportsReadingMetad
         }
         MongoDBTableSource that = (MongoDBTableSource) o;
         return Objects.equals(physicalSchema, that.physicalSchema)
+                && Objects.equals(schema, that.schema)
                 && Objects.equals(hosts, that.hosts)
                 && Objects.equals(username, that.username)
                 && Objects.equals(password, that.password)
@@ -303,6 +310,7 @@ public class MongoDBTableSource implements ScanTableSource, SupportsReadingMetad
     public int hashCode() {
         return Objects.hash(
                 physicalSchema,
+                schema,
                 hosts,
                 username,
                 password,

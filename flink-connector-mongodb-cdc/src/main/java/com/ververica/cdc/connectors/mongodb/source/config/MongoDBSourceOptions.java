@@ -60,6 +60,14 @@ public class MongoDBSourceOptions {
                     .withDescription(
                             "Name of the collection in the database to watch for changes.");
 
+    public static final ConfigOption<String> CONNECTION_SCHEMA =
+            ConfigOptions.key("connection.schema")
+                    .stringType()
+                    .defaultValue("mongodb")
+                    .withDescription(
+                            "The ampersand-separated MongoDB connection options. "
+                                    + "eg. connection.schema=mongodb||mongodb+src");
+
     public static final ConfigOption<String> CONNECTION_OPTIONS =
             ConfigOptions.key("connection.options")
                     .stringType()
